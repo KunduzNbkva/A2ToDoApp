@@ -6,32 +6,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-
-
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.todoapp.App;
 import com.example.todoapp.FormActivity;
 import com.example.todoapp.R;
 import com.example.todoapp.models.Work;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment  {
     private WorkAdapter adapter;
     private List<Work> list;
-    Button button;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -59,9 +51,9 @@ public class HomeFragment extends Fragment  {
 
             }
         });
-        button=view.findViewById(R.id.underRecBtn);
 
-        App.getDataBase().workDao().getAll().observe(this, new Observer<List<Work>>() {
+
+        App.getDataBase().workDao().getAll().observe(getActivity(), new Observer<List<Work>>() {
             @Override
             public void onChanged(List<Work> works) {
                 list.clear();
@@ -80,7 +72,4 @@ public class HomeFragment extends Fragment  {
 
 
     }
-
-
-
 }

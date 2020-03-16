@@ -36,6 +36,7 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder> {
 
 
     public WorkAdapter(List<Work> list) {
+
         this.list = list;
     }
 

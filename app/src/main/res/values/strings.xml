@@ -5,8 +5,10 @@
     <string name="nav_header_title">Narynbekova Kunduz</string>
     <string name="nav_header_subtitle">Kunduznbkva@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Очистить</string>
-    <string name="action_size">Размер шрифта</string>
+    <string name="action_settings">Clear</string>
+    <string name="action_size">Size of font</string>
+    <string name="action_signOut">Sign Out</string>
+
 
     <string name="menu_home">Задачи</string>
     <string name="menu_gallery">Имена</string>
@@ -15,8 +17,9 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="transition_string">hello</string>
+    <string name="hello_blank_fragment">hello_blank_fragment</string>
+
+    <string name="transition_string">animation</string>
+    <string name="menu_firestore">FireStore</string>
 </resources>

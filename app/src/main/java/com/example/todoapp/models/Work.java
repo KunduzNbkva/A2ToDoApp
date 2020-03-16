@@ -1,6 +1,7 @@
 package com.example.todoapp.models;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
@@ -15,7 +16,8 @@ public class Work implements Serializable {
     private String title;
     private String desc;
 
-    public Work() {
+  @Ignore
+  public Work() {
 
     }
 

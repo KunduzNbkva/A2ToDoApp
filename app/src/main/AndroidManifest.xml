@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".PhoneActivity"></activity>
+        <activity android:name=".ProfileActivity" />
         <activity android:name=".ui.home.TransitionActivity" />
         <activity android:name=".SizeActivity" />
         <activity android:name=".ui.onBoard.OnBoardActivity" />

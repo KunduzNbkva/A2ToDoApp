@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class GalleryFragment extends Fragment  {
 
-    private GalleryViewModel galleryViewModel;
     private GalleryAdapter userAdapter;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

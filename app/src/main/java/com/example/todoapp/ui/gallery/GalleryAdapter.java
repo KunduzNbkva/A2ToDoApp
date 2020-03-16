@@ -21,6 +21,7 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
         add("Alex");
     }};
 
+
     @NonNull
     @Override
     public GalleryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

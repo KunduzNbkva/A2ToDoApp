@@ -1,19 +1,20 @@
 package com.example.todoapp;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.ActivityOptionsCompat;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.todoapp.models.Work;
-import com.example.todoapp.ui.home.HomeFragment;
-import com.example.todoapp.ui.home.TransitionActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FormActivity extends AppCompatActivity {
     private EditText editTitle;
@@ -47,8 +48,21 @@ public class FormActivity extends AppCompatActivity {
         work.setTitle(title);
         work.setDesc(desc);
         App.getDataBase().workDao().insert(work);
+        saveToFireStore(work);
         finish();
         }
+    }
+
+    private void saveToFireStore(Work work) {
+        FirebaseFirestore.getInstance().collection("works").add(work)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if(task.isSuccessful())
+                    Toast.makeText(FormActivity.this, "Успешно", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     public void editingTask(){

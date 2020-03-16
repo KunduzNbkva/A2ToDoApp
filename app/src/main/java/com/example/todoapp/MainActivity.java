@@ -1,60 +1,52 @@
 package com.example.todoapp;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-
-import com.example.todoapp.ui.home.TransitionActivity;
-import com.example.todoapp.ui.onBoard.OnBoardActivity;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import android.os.Environment;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.todoapp.ui.FireStoreFragment.FireStoreFragment;
+import com.example.todoapp.ui.home.TransitionActivity;
+import com.example.todoapp.ui.onBoard.OnBoardActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.view.Menu;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.channels.InterruptedByTimeoutException;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private AppBarConfiguration mAppBarConfiguration;
     private final int RC_WRITE_EXTERNAL=101;
     EditText editText,editText2;
     TextView nameHeader, emailHeader;
-
+    private DrawerLayout drawer;
+    private FireStoreFragment fireStoreFragment;
 
 
     @Override
@@ -70,6 +62,12 @@ public class MainActivity extends AppCompatActivity {
         finish();
         return;
         }
+        if (FirebaseAuth.getInstance().getCurrentUser()==null){
+            startActivity(new Intent(this,PhoneActivity.class));
+            finish();
+            return;
+
+        }
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -81,12 +79,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(new Intent(MainActivity.this,FormActivity.class),100);
             }
         });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
+                R.id.nav_home,R.id.nav_firestore, R.id.nav_gallery, R.id.nav_slideshow,
                 R.id.nav_tools, R.id.nav_share, R.id.nav_send)
                 .setDrawerLayout(drawer)
                 .build();
@@ -94,9 +92,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         initFile("");
-
-
     }
+
+
 
 
 
@@ -112,17 +110,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case (R.id.action_settings):
                 Prefs.getInstance(this).delete();
                 startActivity(new Intent(this, OnBoardActivity.class));
-            case (R.id.action_size) :
-                startActivityForResult(new Intent(MainActivity.this,SizeActivity.class),202);
-            case R.id.imageView:
-                startActivity(new Intent(MainActivity.this,ProfileActivity.class));
+                break;
+            case (R.id.action_size):
+                startActivityForResult(new Intent(MainActivity.this, SizeActivity.class), 202);
+            case (R.id.action_signOut):
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(this, PhoneActivity.class));
 
-        break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -165,14 +163,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Fragment navHostFragment=getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        assert navHostFragment != null;
         for (Fragment fragment:navHostFragment.getChildFragmentManager().getFragments()) {
             fragment.onActivityResult(requestCode,resultCode,data);
         }
         if(requestCode==303){
+            assert data != null;
             nameHeader.setText(data.getStringExtra("name"));
             emailHeader.setText(data.getStringExtra("email"));
         }
     }
+
+
+
     public void animateIntent(View view) {
 
         Intent intent = new Intent(this, TransitionActivity.class);
@@ -183,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
                 start,   // Starting view
                 transitionName    // The String
         );
-        //Start the Intent
         ActivityCompat.startActivity(this, intent, options.toBundle());
 
     }
